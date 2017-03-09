@@ -1,4 +1,4 @@
-package br.com.myapp.cartolaultra;
+package br.com.myapp.ultracartola;
 
 import org.junit.Test;
 

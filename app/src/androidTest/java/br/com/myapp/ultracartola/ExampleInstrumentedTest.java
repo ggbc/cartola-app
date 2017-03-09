@@ -1,4 +1,4 @@
-package br.com.myapp.cartolaultra;
+package br.com.myapp.ultracartola;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("br.com.myapp.cartolaultra", appContext.getPackageName());
+        assertEquals("br.com.myapp.ultracartola", appContext.getPackageName());
     }
 }
