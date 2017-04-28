@@ -1,23 +1,18 @@
 package br.com.myapp.ultracartola.business;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 /**
  * Created by Gustavo on 08/03/2017.
  */
 
 public class UserTeam {
+
+    private int mTimeId;
     private List<Athlet> atletas;
-    private JSONObject mClubes;
-    private JSONObject mPosicoes;
-    private JSONObject mStatus;
     private JSONObject mTime;
     private double mPatrimonio;
     private int mEsquemaId;
@@ -25,8 +20,13 @@ public class UserTeam {
     private double mValorTime;
     private int mRodadaAtual;
 
-    public UserTeam() {
+    public UserTeam(int id) {
+        this.mTimeId = id;
         this.atletas = new ArrayList<Athlet>();
+    }
+
+    public int getTimeId() {
+        return mTimeId;
     }
 
     public List<Athlet> getAtletas() {
@@ -35,30 +35,6 @@ public class UserTeam {
 
     public void addAtleta(Athlet atleta) {
         this.atletas.add(atleta);
-    }
-
-    public JSONObject getmClubes() {
-        return mClubes;
-    }
-
-    public void setmClubes(JSONObject mClubes) {
-        this.mClubes = mClubes;
-    }
-
-    public JSONObject getmPosicoes() {
-        return mPosicoes;
-    }
-
-    public void setmPosicoes(JSONObject mPosicoes) {
-        this.mPosicoes = mPosicoes;
-    }
-
-    public JSONObject getmStatus() {
-        return mStatus;
-    }
-
-    public void setmStatus(JSONObject mStatus) {
-        this.mStatus = mStatus;
     }
 
     public JSONObject getmTime() {

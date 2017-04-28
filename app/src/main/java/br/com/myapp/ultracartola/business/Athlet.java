@@ -3,8 +3,6 @@ package br.com.myapp.ultracartola.business;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.icu.lang.UCharacter.JoiningGroup.PE;
-
 /**
  * Created by Gustavo on 08/03/2017.
  */
@@ -17,6 +15,16 @@ public class Athlet {
     private int rodadaId;
     private int clubeId;
     private int posicaoId;
+    private int statusId;
+    private double pontos;
+    private double preco;
+    private double variacao;
+    private double media;
+    private int jogos;
+//    private Match partida;
+//    private Scout scout;
+
+
 //    {
 //        nome: "Maicon Pereira Roque",
 //                apelido: "Maicon",
@@ -78,6 +86,12 @@ public class Athlet {
             this.rodadaId = object.getInt("rodada_id");
             this.clubeId = object.getInt("clube_id");
             this.posicaoId = object.getInt("posicao_id");
+            this.statusId = object.getInt("status_id");
+            this.pontos= object.getDouble("pontos_num");
+            this.preco = object.getDouble("preco_num");
+            this.variacao = object.getDouble("variacao_num");
+            this.media = object.getDouble("media_num");
+            this.jogos = object.getInt("jogos_num");
         } catch (JSONException e) {
             e.printStackTrace();
         }

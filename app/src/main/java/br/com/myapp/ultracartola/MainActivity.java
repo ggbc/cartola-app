@@ -6,31 +6,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import br.com.myapp.ultracartola.business.Athlet;
 import br.com.myapp.ultracartola.business.UserTeam;
 
-import static android.media.CamcorderProfile.get;
-
 public class MainActivity extends AppCompatActivity {
+
+    public static final String FILENAME = "teams";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(br.com.myapp.ultracartola.R.layout.activity_main);
-    }
+        setContentView(R.layout.activity_main);
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+        restoreTeamsFromDisk();
     }
 
     @Override
@@ -55,39 +50,79 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateScores(View view) {
-        String url = "https://api.cartolafc.globo.com/time/nikiti-red-bull";
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+    private ArrayList<UserTeam> restoreTeamsFromDisk() {
+        //TODO: Escolher melhor tipo de lista, que seja um que não permite duplicidade
+        ArrayList<UserTeam> chosenTeams = new ArrayList<UserTeam>();
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        parseTeam(response);
-                    }
-                }, new Response.ErrorListener() {
+        // Gets the file from the /res/raw directory
+        InputStream is = getApplicationContext().getResources().openRawResource(R.raw.teams);
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                    }
-                });
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
-    }
+//        // Creates teams file if it doesn't exist
+//        File file = new File(FILENAME);
+//        if (!file.exists()) {
+//            try {
+//                file.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-    private void parseTeam(JSONObject response) {
+        // Then read it
         try {
-            parseAthlets(response);
-        } catch (JSONException e) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String team = "";
+            while ((team = br.readLine()) != null) {
+                chosenTeams.add(new UserTeam(0));
+            }
+            br.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void parseAthlets(JSONObject response) throws JSONException {
-        UserTeam userTeam = new UserTeam();
-        JSONArray atletas = response.getJSONArray("atletas");
 
-        for(int i = 0; i < atletas.length(); i++){
-            userTeam.addAtleta(new Athlet(atletas.getJSONObject(i)));
-        }
+    public void addTeam(View view) {
+
     }
+
+
+    public void updateScores(View view) {
+//        String url = "https://api.cartolafc.globo.com/atletas/mercado";
+////        String url = "https://api.cartolafc.globo.com/time/slug/stacfc-bb";
+//
+//        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+//                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        // TODO completar código com loop sobre todos os times selecionados
+//                        parseTeam(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO Auto-generated method stub
+//                    }
+//                });
+//        RequestQueueSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
+    }
+//
+//    private void parseTeam(JSONObject response) {
+//        try {
+//            UserTeam team = new UserTeam();
+//            JSONArray athlets = response.getJSONArray("atletas");
+//            parseAthlets(athlets);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private static ArrayList<Athlet> parseAthlets(JSONArray json) throws JSONException {
+//        ArrayList<Athlet> athlets = new ArrayList<Athlet>();
+//        for (int i = 0; i < json.length(); i++) {
+//            athlets.add(new Athlet(json.getJSONObject(i)));
+//        }
+//        return athlets;
+//    }
 }
