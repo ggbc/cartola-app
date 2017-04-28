@@ -7,8 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,7 +16,7 @@ import br.com.myapp.ultracartola.business.UserTeam;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String FILENAME = "teams";
+//    public static final String FILENAME = "teams";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,33 +49,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList<UserTeam> restoreTeamsFromDisk() {
-        //TODO: Escolher melhor tipo de lista, que seja um que não permite duplicidade
-        ArrayList<UserTeam> chosenTeams = new ArrayList<UserTeam>();
+        //TODO: Escolher melhor tipo de lista: um que NÃO permita duplicidade
+        ArrayList<UserTeam> chosenTeams = new ArrayList<>();
 
         // Gets the file from the /res/raw directory
         InputStream is = getApplicationContext().getResources().openRawResource(R.raw.teams);
 
-//        // Creates teams file if it doesn't exist
-//        File file = new File(FILENAME);
-//        if (!file.exists()) {
-//            try {
-//                file.createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         // Then read it
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String team = "";
+            String team;
             while ((team = br.readLine()) != null) {
-                chosenTeams.add(new UserTeam(0));
+                int id = Integer.valueOf(team);
+                chosenTeams.add(new UserTeam(id));
             }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return chosenTeams;
     }
 
 
