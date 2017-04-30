@@ -1,35 +1,31 @@
 package br.com.myapp.ultracartola;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
-import br.com.myapp.ultracartola.business.UserTeam;
 
 public class MainActivity extends AppCompatActivity {
-
-//    public static final String FILENAME = "teams";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        restoreTeamsFromDisk();
+        if (savedInstanceState == null) {
+            TeamListFragment teamsFragment = new TeamListFragment();
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_placeholder, teamsFragment);
+            transaction.commit();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(br.com.myapp.ultracartola.R.menu.main, menu);
+        getMenuInflater().inflate(br.com.myapp.ultracartola.R.menu.main_menu, menu);
         return true;
     }
 
@@ -41,42 +37,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == br.com.myapp.ultracartola.R.id.action_settings) {
+        if (id == R.id.menu_refresh) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<UserTeam> restoreTeamsFromDisk() {
-        //TODO: Escolher melhor tipo de lista: um que NÃO permita duplicidade
-        ArrayList<UserTeam> chosenTeams = new ArrayList<>();
-
-        // Gets the file from the /res/raw directory
-        InputStream is = getApplicationContext().getResources().openRawResource(R.raw.teams);
-
-        // Then read it
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String team;
-            while ((team = br.readLine()) != null) {
-                int id = Integer.valueOf(team);
-                chosenTeams.add(new UserTeam(id));
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return chosenTeams;
-    }
 
 
-    public void addTeam(View view) {
-
-    }
-
-
-    public void updateScores(View view) {
+//    public void updateScores(View view) {
 //        String url = "https://api.cartolafc.globo.com/atletas/mercado";
 ////        String url = "https://api.cartolafc.globo.com/time/slug/stacfc-bb";
 //
@@ -95,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
 //                        // TODO Auto-generated method stub
 //                    }
 //                });
-//        RequestQueueSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
-    }
+//        RequestQueueSingleton.getInstance(get).addToRequestQueue(jsObjRequest);
+////    }
 //
 //    private void parseTeam(JSONObject response) {
 //        try {
-//            UserTeam team = new UserTeam();
+//            Team team = new Team();
 //            JSONArray athlets = response.getJSONArray("atletas");
 //            parseAthlets(athlets);
 //        } catch (JSONException e) {
