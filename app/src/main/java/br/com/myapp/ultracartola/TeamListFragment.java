@@ -1,6 +1,5 @@
 package br.com.myapp.ultracartola;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,7 +26,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import br.com.myapp.ultracartola.business.Team;
 
@@ -39,6 +37,8 @@ public class TeamListFragment extends Fragment {
 
     private TeamListAdapter mTeamListAdapter;
     private ArrayList<Team> mTeamList;
+    private static Integer mResponseCounter = 0;
+    private ArrayList<Integer> mTeamIds;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,7 @@ public class TeamListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mTeamIds = new ArrayList<Integer>();
         mTeamList = new ArrayList<Team>();
         setTeamList();
         mTeamListAdapter = new TeamListAdapter(getActivity(), mTeamList);
@@ -108,22 +109,13 @@ public class TeamListFragment extends Fragment {
      * SwipeGestureLayout onRefresh() method and the Refresh action item to refresh the content.
      */
     private void initiateRefresh() {
-
-//        setTeamList();
-
-        new DummyBackgroundTask().execute();
-        //TODO: implementar aqui os requests no lugar da AsyncTask
+        mTeamListAdapter.clear();
+        setTeamList();
     }
 
     /*
-    *   TODO: Obrigatório manter isso. Vai representar o fim da atualização da lista toda.
+    *  The teams selected by the user must be retrieved from disk
     * */
-    private void onRefreshComplete(Void result) {
-        mTeamListAdapter.clear();
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-
     private ArrayList<Integer> getTeamsIdsFromDisk() {
         //A LinkedHashSet does not allow duplicates and gets the data in the order it was saved
         Set<Integer> ids = new LinkedHashSet<>();
@@ -154,29 +146,25 @@ public class TeamListFragment extends Fragment {
     * Fetches Teams from webservice and adds them to mTeamList
     * */
     private void setTeamList() {
+        mResponseCounter = 0;
+
         //Gets the list of teams by id from disk
-        ArrayList<Integer> ids = getTeamsIdsFromDisk();
+        mTeamIds = getTeamsIdsFromDisk();
 
         // And requests details from the webservice
-        for (Integer i : ids) {
+        for (Integer i : mTeamIds) {
             requestTeamById(i);
         }
     }
 
-    private class DummyBackgroundTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            setTeamList();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            // Tell the Fragment that the refresh has completed
-            onRefreshComplete(result);
+    /*
+    *   When a response is finished for the /time/id webservice check whether it is already time
+    * to stop refreshing the list.
+    * */
+    private void onResponseFinished() {
+        mResponseCounter++;
+        if (mResponseCounter == mTeamIds.size()) {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -192,12 +180,13 @@ public class TeamListFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         mTeamList.add(parseTeam(response));
                         mTeamListAdapter.notifyDataSetChanged();
+                        onResponseFinished();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+                        onResponseFinished();
                     }
                 });
         RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
