@@ -158,8 +158,8 @@ public class TeamListFragment extends Fragment {
     }
 
     /*
-    *   When a response is finished for the /time/id webservice check whether it is already time
-    * to stop refreshing the list.
+    * Since there are several calls to the webservice, the right moment to setRefreshing to false
+    * is when all the HttpResponses arrived.
     * */
     private void onResponseFinished() {
         mResponseCounter++;

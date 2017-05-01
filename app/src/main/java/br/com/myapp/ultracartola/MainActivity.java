@@ -43,46 +43,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-//    public void updateScores(View view) {
-//        String url = "https://api.cartolafc.globo.com/atletas/mercado";
-////        String url = "https://api.cartolafc.globo.com/time/slug/stacfc-bb";
-//
-//        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-//                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        // TODO completar código com loop sobre todos os times selecionados
-//                        parseTeam(response);
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // TODO Auto-generated method stub
-//                    }
-//                });
-//        RequestQueueSingleton.getInstance(get).addToRequestQueue(jsObjRequest);
-////    }
-//
-//    private void parseTeam(JSONObject response) {
-//        try {
-//            Team team = new Team();
-//            JSONArray athlets = response.getJSONArray("atletas");
-//            parseAthlets(athlets);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private static ArrayList<Athlet> parseAthlets(JSONArray json) throws JSONException {
-//        ArrayList<Athlet> athlets = new ArrayList<Athlet>();
-//        for (int i = 0; i < json.length(); i++) {
-//            athlets.add(new Athlet(json.getJSONObject(i)));
-//        }
-//        return athlets;
-//    }
 }
