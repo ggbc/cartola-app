@@ -15,10 +15,6 @@ public class Team {
 
     }
 
-//    public Team(int id) {
-//        this.timeId = id;
-//    }
-
     public int getTimeId() {
         return timeId;
     }

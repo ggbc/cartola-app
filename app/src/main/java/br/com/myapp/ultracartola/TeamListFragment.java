@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -31,6 +28,7 @@ import br.com.myapp.ultracartola.business.Team;
 
 
 public class TeamListFragment extends Fragment {
+//        implements ListView.OnItemClickListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView mListView;
@@ -67,9 +65,11 @@ public class TeamListFragment extends Fragment {
 
         mTeamIds = new ArrayList<Integer>();
         mTeamList = new ArrayList<Team>();
-        setTeamList();
         mTeamListAdapter = new TeamListAdapter(getActivity(), mTeamList);
         mListView.setAdapter(mTeamListAdapter);
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        initiateRefresh();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -79,35 +79,6 @@ public class TeamListFragment extends Fragment {
         });
     }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_refresh:
-
-                // We make sure that the SwipeRefreshLayout is displaying it's refreshing indicator
-                if (!mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                }
-
-                // Start our refresh background task
-                initiateRefresh();
-
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * By abstracting the refresh process to a single method, the app allows both the
-     * SwipeGestureLayout onRefresh() method and the Refresh action item to refresh the content.
-     */
     private void initiateRefresh() {
         mTeamListAdapter.clear();
         setTeamList();
@@ -216,4 +187,10 @@ public class TeamListFragment extends Fragment {
 
         return team;
     }
+
+
+//    @Override
+//    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+//        startActivity(mSamples[position].intent);
+//    }
 }
