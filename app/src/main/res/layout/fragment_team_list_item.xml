@@ -7,12 +7,11 @@
     android:orientation="horizontal"
     android:layout_margin="8dp">
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/teamBadge"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_alignParentLeft="true"
-        app:srcCompat="@android:drawable/ic_menu_gallery"/>
+        android:layout_alignParentLeft="true"/>
 
     <TextView
         android:id="@+id/teamName"

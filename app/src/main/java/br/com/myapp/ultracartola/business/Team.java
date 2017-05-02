@@ -1,5 +1,7 @@
 package br.com.myapp.ultracartola.business;
 
+import java.util.ArrayList;
+
 /**
  * Created by Gustavo on 29/04/2017.
  */
@@ -10,7 +12,7 @@ public class Team {
     private String nomeCartola;
     private String urlEscudoPng;
     private double pontos;
-
+    private ArrayList<Athlet> atletas;
     public Team() {
 
     }
@@ -53,5 +55,13 @@ public class Team {
 
     public void setPontos(double pontos) {
         this.pontos = pontos;
+    }
+
+    public ArrayList<Athlet> getAtletas() {
+        return atletas;
+    }
+
+    public void setAtletas(ArrayList<Athlet> atletas) {
+        this.atletas = atletas;
     }
 }

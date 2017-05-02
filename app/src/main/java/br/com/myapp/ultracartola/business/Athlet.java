@@ -3,6 +3,8 @@ package br.com.myapp.ultracartola.business;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import br.com.myapp.ultracartola.common.Common;
+
 /**
  * Created by Gustavo on 08/03/2017.
  */
@@ -23,6 +25,8 @@ public class Athlet {
     private int jogos;
 //    private Match partida;
 //    private Scout scout;
+
+    private String fotoClubeUrl;
 
 
 //    {
@@ -77,6 +81,22 @@ public class Athlet {
 //        }
 //    },
 
+
+//    nome: "Paulo Autuori",
+//    apelido: "Paulo Autuori",
+//    foto: "https://s.glbimg.com/es/sde/f/2017/04/23/51bd7e83b21a81fb576ba2321746e749_FORMATO.png",
+//    atleta_id: 36943,
+//    rodada_id: 1,
+//    clube_id: 293,
+//    posicao_id: 6,
+//    status_id: 7,
+//    pontos_num: 0,
+//    preco_num: 10,
+//    variacao_num: 0,
+//    media_num: 0,
+//    jogos_num: 0,
+//    scout: { }
+
     public Athlet(JSONObject object) {
         try {
             this.nome = object.getString("nome");
@@ -95,5 +115,60 @@ public class Athlet {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl.replace("FORMATO", "80x80");
+    }
+
+    public int getAtletaId() {
+        return atletaId;
+    }
+
+    public int getClubeId() {
+        return clubeId;
+    }
+
+    public int getPosicaoId() {
+        return posicaoId;
+    }
+
+    public double getPontos() {
+        return pontos;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public double getVariacao() {
+        return variacao;
+    }
+
+    public double getMedia() {
+        return media;
+    }
+
+    public int getJogos() {
+        return jogos;
+    }
+
+    public String getFotoClubeUrl() {
+
+        if ( getClubeId() != 0 )
+        {
+            Common.setClubPhotoUrl();
+            return Common.CLUBS.get(getClubeId());
+        }
+
+        return fotoClubeUrl;
     }
 }

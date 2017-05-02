@@ -1,11 +1,13 @@
 package br.com.myapp.ultracartola;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -13,7 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -25,10 +26,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import br.com.myapp.ultracartola.business.Team;
+import br.com.myapp.ultracartola.common.Common;
 
 
-public class TeamListFragment extends Fragment {
-//        implements ListView.OnItemClickListener {
+public class TeamListFragment extends Fragment implements ListView.OnItemClickListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView mListView;
@@ -50,11 +51,9 @@ public class TeamListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_list, container, false);
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
-
         mListView = (ListView) view.findViewById(android.R.id.list);
-
+        mListView.setOnItemClickListener(this);
         return view;
     }
 
@@ -132,7 +131,7 @@ public class TeamListFragment extends Fragment {
     * Since there are several calls to the webservice, the right moment to setRefreshing to false
     * is when all the HttpResponses arrived.
     * */
-    private void onResponseFinished() {
+    private void onResponseCompleted() {
         mResponseCounter++;
         if (mResponseCounter == mTeamIds.size()) {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -149,48 +148,76 @@ public class TeamListFragment extends Fragment {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        mTeamList.add(parseTeam(response));
+                        mTeamList.add(Common.parseTeam(response));
                         mTeamListAdapter.notifyDataSetChanged();
-                        onResponseFinished();
+                        onResponseCompleted();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        onResponseFinished();
+                        onResponseCompleted();
                     }
                 });
         RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
     }
 
-    //TODO: criar classe Common.Parser
-    private Team parseTeam(JSONObject response){
-        Team team = new Team();
 
-        try {
-
-            //Get "time" from response
-            JSONObject jsonTeam = response.getJSONObject("time");
-            if (!response.isNull("pontos")) {
-                team.setPontos(response.getDouble("pontos"));
-            }
-
-            //Get details from "time"
-            team.setTimeId(jsonTeam.getInt("time_id"));
-            team.setNome(jsonTeam.getString("nome"));
-            team.setNomeCartola(jsonTeam.getString("nome_cartola"));
-            team.setUrlEscudoPng(jsonTeam.getString("url_escudo_png"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return team;
-    }
-
-
-//    @Override
-//    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//        startActivity(mSamples[position].intent);
+//    private Team parseTeam(JSONObject response) {
+//        Team team = new Team();
+//
+//        try {
+//
+//            //Get "time" from response
+//            JSONObject jsonTeam = response.getJSONObject("time");
+//            if (!response.isNull("pontos")) {
+//                team.setPontos(response.getDouble("pontos"));
+//            }
+//
+//            //Get details from "time"
+//            team.setTimeId(jsonTeam.getInt("time_id"));
+//            team.setNome(jsonTeam.getString("nome"));
+//            team.setNomeCartola(jsonTeam.getString("nome_cartola"));
+//            team.setUrlEscudoPng(jsonTeam.getString("url_escudo_png"));
+//
+//
+//            // Get athlets
+//            if (!response.isNull("atletas")) {
+//                JSONArray jsonAthlets = response.getJSONArray("atletas");
+//
+//                ArrayList<Athlet> athlets = new ArrayList<Athlet>();
+//                for (int i = 0; i < jsonAthlets.length(); i++) {
+//                    athlets.add(new Athlet(jsonAthlets.getJSONObject(i)));
+//                }
+//                team.setAtletas(athlets);
+//            }
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return team;
 //    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Intent intent = new Intent(getContext(), AthletsListActivity.class);
+
+        Team t = mTeamListAdapter.getItem(position);
+
+//        if (t.getAtletas() == null) {
+//            Context context = this.getContext();
+//            CharSequence text = "Nenhum atleta em campo. O mercado já fechou?";
+//            int duration = Toast.LENGTH_SHORT;
+//
+//            Toast toast = Toast.makeText(context, text, duration);
+//            toast.show();
+//            return;
+//        }
+
+        intent.putExtra("teamId", t.getTimeId());
+        intent.putExtra("athlets", t.getAtletas());
+        startActivity(intent);
+    }
 }

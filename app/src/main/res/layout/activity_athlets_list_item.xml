@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/athletPhoto"
+            android:layout_width="64dp"
+            android:layout_height="64dp" />
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/teamBadge"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignBottom="@+id/athletPhoto"
+            android:layout_alignRight="@+id/athletPhoto"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="3"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/athletAlias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apelido do Jogador"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+        <TextView
+            android:id="@+id/athletPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="posição"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/athletCost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="C$ 10,00"
+        android:layout_weight="1"
+        android:layout_margin="8dp"/>
+
+    <TextView
+        android:id="@+id/athletPoints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="10,00"
+        android:layout_weight="1"
+        android:layout_margin="8dp"/>
+</LinearLayout>
+
