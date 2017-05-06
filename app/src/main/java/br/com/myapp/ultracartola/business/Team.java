@@ -13,6 +13,10 @@ public class Team {
     private String urlEscudoPng;
     private double pontos;
     private ArrayList<Athlet> atletas;
+
+    // Used only on the SearchTeamActivity
+    private boolean checked;
+
     public Team() {
 
     }
@@ -63,5 +67,13 @@ public class Team {
 
     public void setAtletas(ArrayList<Athlet> atletas) {
         this.atletas = atletas;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

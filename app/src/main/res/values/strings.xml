@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Cartolapp</string>
     <string name="menu_refresh">Atualizar</string>
+    <string name="search_hint">Procurar times ou cartoleiros</string>
+    <string name="team_added">Time adicionado</string>
+    <string name="team_removed">Time removido</string>
 </resources>
