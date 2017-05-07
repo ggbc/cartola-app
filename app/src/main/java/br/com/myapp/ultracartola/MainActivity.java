@@ -9,13 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.ArrayList;
-
-import br.com.myapp.ultracartola.common.Common;
-
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Integer> mTeamIds;
+//    private ArrayList<Integer> mTeamIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +19,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Gets the list of ids of the teams from disk
-        mTeamIds = new ArrayList<>(Common.getTeamsIdsFromDisk(this));
+//        mTeamIds = new ArrayList<>(Common.getTeamsIdsFromDisk(this));
 
         if (savedInstanceState == null) {
             TeamListFragment teamsFragment = new TeamListFragment();
 
-            Bundle args = new Bundle();
-            args.putIntegerArrayList(TeamListFragment.ARG_IDS_LIST, mTeamIds);
-            teamsFragment.setArguments(args);
+//            Bundle args = new Bundle();
+//            args.putIntegerArrayList(TeamListFragment.ARG_IDS_LIST, mTeamIds);
+//            teamsFragment.setArguments(args);
 
             FragmentTransaction transaction = getSupportFragmentManager()
                     .beginTransaction()
@@ -43,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SearchTeamActivity.class);
-                intent.putExtra(SearchTeamActivity.ARG_IDS_LIST, mTeamIds);
+//                intent.putExtra(SearchTeamActivity.ARG_IDS_LIST, mTeamIds);
                 startActivity(intent);
             }
         });

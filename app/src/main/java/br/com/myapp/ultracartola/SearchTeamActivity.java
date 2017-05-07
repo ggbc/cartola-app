@@ -3,7 +3,9 @@ package br.com.myapp.ultracartola;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -25,22 +27,38 @@ import br.com.myapp.ultracartola.common.Common;
 public class SearchTeamActivity extends AppCompatActivity
         implements TeamSearchAdapter.IOnTeamCheckedListener {
 
-    public final static String ARG_IDS_LIST = "ids_list";
+
     private final static int TYPING_DELAY = 500;
     private Set<Integer> mTeamIds;
     private TeamSearchAdapter mSelectableTeamListAdapter;
     private ArrayList<Team> mTeamList; //TODO: Mudar para ArrayList<SelectableTeam>
 
     private String mQueryString;
-    private Handler mHandler;
+    private Handler mHandler = new Handler();
+
+    private ProgressBar mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_team);
 
-        mHandler = new Handler();
+//        mTeamIds = new LinkedHashSet<>(getIntent().getIntegerArrayListExtra(ARG_IDS_LIST));
+        //Creates the list of Ids
+        mTeamIds = new LinkedHashSet<>();
+
+        // Creates and sets the adapter
+        mTeamList = new ArrayList<Team>();
+        mSelectableTeamListAdapter = new TeamSearchAdapter(this,
+                R.layout.activity_search_team_item, mTeamList);
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(mSelectableTeamListAdapter);
+
+        mProgress = (ProgressBar) findViewById(R.id.progressBar);
+        mProgress.setVisibility(View.GONE);
+
         SearchView searchView = (SearchView) findViewById(R.id.searchView);
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -61,28 +79,6 @@ public class SearchTeamActivity extends AppCompatActivity
                 return true;
             }
         });
-
-        // Get the Ids from the list sent by MainActivity
-        mTeamIds = new LinkedHashSet<>(getIntent().getIntegerArrayListExtra(ARG_IDS_LIST));
-
-        // Creates and sets the adapter
-        mTeamList = new ArrayList<Team>();
-        mSelectableTeamListAdapter = new TeamSearchAdapter(this,
-                R.layout.activity_search_team_item, mTeamList);
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(mSelectableTeamListAdapter);
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//                // When clicked, show a toast with the TextView text
-//                Team team = (Team) parent.getItemAtPosition(position);
-//                Toast.makeText(getApplicationContext(),
-//                        "Clicked on Row: " + team.getNome(),
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        });
-
 //        Button buttonSave = (Button) findViewById(R.id.buttonSave);
 //        buttonSave.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -92,10 +88,19 @@ public class SearchTeamActivity extends AppCompatActivity
 //        });
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTeamIds = Common.getTeamsIdsFromDisk(this);
+    }
+
     /*
-    *   Save the ids of the selected teams to disk
-    * */
+        *   Save the ids of the selected teams to disk
+        * */
     private void saveTeamsIdsToDisk(Set<Integer> teamsIds) {
+        //TODO: ver como se inclui um botão no Actionbar para salvar
         try {
             Common.saveTeamsIdsToDisk(this, teamsIds);
         } catch (IOException e) {
@@ -107,8 +112,16 @@ public class SearchTeamActivity extends AppCompatActivity
     * Calls the webservice and fills the list with results
     * */
     private void doSearch(String query) {
+        mProgress.setVisibility(View.VISIBLE);
         mSelectableTeamListAdapter.clear();
         requestTeamByNameOrOwner(query);
+    }
+
+    /*
+    *
+    * */
+    private void onResponseCompleted() {
+        mProgress.setVisibility(View.GONE);
     }
 
     /**
@@ -123,12 +136,13 @@ public class SearchTeamActivity extends AppCompatActivity
                     public void onResponse(JSONArray response) {
                         mTeamList.addAll(Common.WebServices.parseSearchResult(response, mTeamIds));
                         mSelectableTeamListAdapter.notifyDataSetChanged();
+                        onResponseCompleted();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //TODO algo quando der erro?
+                        onResponseCompleted();
                     }
                 });
         RequestQueueSingleton.getInstance(this).addToRequestQueue(jsObjRequest);

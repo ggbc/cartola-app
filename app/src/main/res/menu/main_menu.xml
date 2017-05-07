@@ -5,4 +5,9 @@
         android:id="@+id/menu_refresh"
         android:title="@string/menu_refresh"
         android:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_clear"
+        android:title="@string/menu_clear"
+        android:showAsAction="never" />
 </menu>
