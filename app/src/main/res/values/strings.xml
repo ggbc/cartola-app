@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cartolapp</string>
+    <string name="app_name">CartolApp</string>
     <string name="menu_refresh">Atualizar</string>
     <string name="menu_clear">Remover todos os times</string>
     <string name="search_hint">Procurar por nome ou time</string>

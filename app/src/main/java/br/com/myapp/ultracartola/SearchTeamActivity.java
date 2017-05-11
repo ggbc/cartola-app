@@ -1,5 +1,6 @@
 package br.com.myapp.ultracartola;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -55,10 +57,15 @@ public class SearchTeamActivity extends AppCompatActivity
         listView.setAdapter(mSelectableTeamListAdapter);
 
         mProgress = (ProgressBar) findViewById(R.id.progressBar);
-        mProgress.setVisibility(View.GONE);
+        mProgress.setVisibility(View.INVISIBLE);
 
         SearchView searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
+
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -79,13 +86,6 @@ public class SearchTeamActivity extends AppCompatActivity
                 return true;
             }
         });
-//        Button buttonSave = (Button) findViewById(R.id.buttonSave);
-//        buttonSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                saveTeamsIdsToDisk(mTeamIds);
-//            }
-//        });
     }
 
 
@@ -121,14 +121,26 @@ public class SearchTeamActivity extends AppCompatActivity
     *
     * */
     private void onResponseCompleted() {
-        mProgress.setVisibility(View.GONE);
+        mProgress.setVisibility(View.INVISIBLE);
+        TextView textEmpty = (TextView) findViewById(R.id.textEmpty);
+        if (mTeamList.isEmpty()) {
+            textEmpty.setVisibility(View.VISIBLE);
+        } else {
+            textEmpty.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
      * Calls webservice to get basic team and user info
      */
     private void requestTeamByNameOrOwner(String queryString) {
-        String url = "https://api.cartolafc.globo.com/times?q=" + queryString;
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(Common.WebServices.SCHEME)
+                .authority(Common.WebServices.AUTHORITY)
+                .appendPath(Common.WebServices.SEARCH_TEAMS_PATH)
+                .appendQueryParameter(Common.WebServices.SEARCH_TEAMS_QUERY, queryString);
+        String url = builder.build().toString();
+
         JsonArrayRequest jsObjRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 

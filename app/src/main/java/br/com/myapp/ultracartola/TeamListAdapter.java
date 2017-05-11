@@ -1,6 +1,8 @@
 package br.com.myapp.ultracartola;
 
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,32 +23,49 @@ public class TeamListAdapter extends ArrayAdapter<Team> {
     private FragmentActivity activity;
     private ArrayList<Team> listItems;
 
+    private class ViewHolder {
+        NetworkImageView teamBadge;
+        TextView teamName;
+        TextView teamCartolaName;
+        TextView teamPoints;
+    }
+
     public TeamListAdapter(FragmentActivity activity, ArrayList<Team> list) {
         super(activity, android.R.layout.simple_list_item_1, list);
-        this.activity = activity;
         this.listItems = list;
+        this.activity = activity;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        TeamListAdapter.ViewHolder holder = null;
+
         if (convertView == null) {
-            convertView = activity.getLayoutInflater().inflate(R.layout.fragment_team_list_item,
-                    parent, false);
+            LayoutInflater vi = (LayoutInflater) activity
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = vi.inflate(R.layout.fragment_team_list_item, parent, false);
+
+            holder = new TeamListAdapter.ViewHolder();
+            holder.teamBadge = (NetworkImageView) convertView.findViewById(R.id.teamBadge);
+            holder.teamName = (TextView) convertView.findViewById(R.id.teamName);
+            holder.teamCartolaName = (TextView) convertView.findViewById(R.id.teamCartolaName);
+            holder.teamPoints = (TextView) convertView.findViewById(R.id.teamPoints);
+            convertView.setTag(holder);
+
+        } else {
+            holder = (TeamListAdapter.ViewHolder) convertView.getTag();
         }
 
         Team team = (Team) getItem(position);
-
-//        Glide.with(activity).load(team.getUrlEscudoPng()).into((ImageView) convertView.findViewById(R.id.teamBadge));
-        ((NetworkImageView) convertView.findViewById(R.id.teamBadge))
-                .setImageUrl(
+        holder.teamBadge.setImageUrl(
                         team.getUrlEscudoPng(),
                         RequestQueueSingleton
                                 .getInstance(convertView.getContext())
                                 .getImageLoader()
-                        );
-        ((TextView) convertView.findViewById(R.id.teamName)).setText(team.getNome());
-        ((TextView) convertView.findViewById(R.id.teamCartolaName)).setText(team.getNomeCartola());
-        ((TextView) convertView.findViewById(R.id.teamPoints)).setText(Double.toString(team.getPontos()));
+                );
+        holder.teamName.setText(team.getNome());
+        holder.teamCartolaName.setText(team.getNomeCartola());
+        holder.teamPoints.setText(Double.toString(team.getPontos()));
 
         return convertView;
     }

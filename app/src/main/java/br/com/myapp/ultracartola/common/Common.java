@@ -72,6 +72,12 @@ public final class Common {
         FileOutputStream fos = context.openFileOutput(Common.TEAMS_FILNEMANE, Context.MODE_PRIVATE);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
+        // If the list of teams was cleared, erase the file as well
+        if (teamsIds.isEmpty()) {
+            bw.write("");
+        }
+
+        // Case else, save the teams ids
         for (Integer id : teamsIds) {
             bw.write(Integer.toString(id));
             bw.newLine();
@@ -106,6 +112,13 @@ public final class Common {
     }
 
     public static class WebServices {
+        public final static String SCHEME = "https";
+        public final static String AUTHORITY = "api.cartolafc.globo.com";
+        public final static String SEARCH_TEAMS_PATH = "times";
+        public final static String SEARCH_TEAMS_QUERY = "q";
+        public final static String TEAM_PATH = "time";
+        public final static String TEAM_ID_PATH = "id";
+
         /*
         * Parse Athlets from the webservice response
         * */
@@ -143,6 +156,8 @@ public final class Common {
                 JSONObject jsonTeam = response.getJSONObject("time");
                 if (!response.isNull("pontos")) {
                     team.setPontos(response.getDouble("pontos"));
+                } else {
+                    team.setPontos(0.0);
                 }
 
                 //Get details from "time"

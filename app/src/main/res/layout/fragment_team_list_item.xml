@@ -43,7 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
-        android:layout_toRightOf="@+id/teamId"
         android:text="100,0"
         android:textSize="18sp"
         app:layout_constraintRight_toRightOf="parent"

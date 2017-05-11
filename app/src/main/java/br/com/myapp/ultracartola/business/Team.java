@@ -1,17 +1,19 @@
 package br.com.myapp.ultracartola.business;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 
 /**
  * Created by Gustavo on 29/04/2017.
  */
 
-public class Team {
+public class Team implements Comparable<Team>{
     private int timeId;
     private String nome;
     private String nomeCartola;
     private String urlEscudoPng;
-    private double pontos;
+    private Double pontos;
     private ArrayList<Athlet> atletas;
 
     // Used only on the SearchTeamActivity
@@ -53,11 +55,11 @@ public class Team {
         this.urlEscudoPng = urlEscudoPng;
     }
 
-    public double getPontos() {
+    public Double getPontos() {
         return pontos;
     }
 
-    public void setPontos(double pontos) {
+    public void setPontos(Double pontos) {
         this.pontos = pontos;
     }
 
@@ -75,5 +77,19 @@ public class Team {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    @Override
+    public int compareTo(@NonNull Team team) throws IllegalArgumentException{
+        if (this.getPontos() > team.getPontos()) {
+            return 1;
+        }
+        else {
+            if (this.getPontos() < team.getPontos()) {
+                return -1;
+            } else {
+                return this.getNome().compareTo(team.getNome());
+            }
+        }
     }
 }

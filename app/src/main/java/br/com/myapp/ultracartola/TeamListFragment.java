@@ -2,11 +2,13 @@ package br.com.myapp.ultracartola;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,7 +22,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 
 import br.com.myapp.ultracartola.business.Team;
@@ -41,9 +45,37 @@ public class TeamListFragment extends Fragment implements ListView.OnItemClickLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Notify the system to allow an options menu for this fragment.
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_refresh) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            initiateRefresh();
+        } else if (id == R.id.menu_clear) {
+            clearAllTeams();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void clearAllTeams() {
+        mTeamIds.clear();
+        mTeamList.clear();
+        mTeamListAdapter.clear();
+        mTeamListAdapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
+        try {
+            Common.saveTeamsIdsToDisk(getActivity(), mTeamIds);
+        } catch (IOException e) {
+            Snackbar.make(getView(), "Ocorreu um erro ao salvar os times", Snackbar.LENGTH_LONG);
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -54,10 +86,6 @@ public class TeamListFragment extends Fragment implements ListView.OnItemClickLi
         mListView = (ListView) view.findViewById(android.R.id.list);
         mListView.setOnItemClickListener(this);
 
-//        Bundle args = getArguments();
-//        if (args != null) {
-//            mTeamIds = args.getIntegerArrayList(ARG_IDS_LIST);
-//        }
         return view;
     }
 
@@ -125,7 +153,9 @@ public class TeamListFragment extends Fragment implements ListView.OnItemClickLi
         mResponseCounter++;
         if (mResponseCounter == mTeamIds.size()) {
             mSwipeRefreshLayout.setRefreshing(false);
-            Snackbar.make(getView(), mTeamList.size() + " times no total", Snackbar.LENGTH_LONG).show();
+            if (!mTeamIds.isEmpty()) {
+                Snackbar.make(getView(), "Time(s) carregado(s)!", Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -133,13 +163,23 @@ public class TeamListFragment extends Fragment implements ListView.OnItemClickLi
      * Calls webservice to get team details
      */
     private void requestTeamById(int id) {
-        String url = "https://api.cartolafc.globo.com/time/id/" + id;
+//        String url = "https://api.cartolafc.globo.com/time/id/" + id;
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(Common.WebServices.SCHEME)
+                .authority(Common.WebServices.AUTHORITY)
+                .appendPath(Common.WebServices.TEAM_PATH)
+                .appendPath(Common.WebServices.TEAM_ID_PATH)
+                .appendPath(Integer.toString(id));
+        String url = builder.build().toString();
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         mTeamList.add(Common.WebServices.parseTeam(response));
+                        Collections.sort(mTeamList);
                         mTeamListAdapter.notifyDataSetChanged();
                         onResponseCompleted();
                     }
