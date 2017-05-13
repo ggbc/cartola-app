@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola;
+package br.com.mapps.cartoloucos;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,8 +13,8 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
-import br.com.myapp.ultracartola.business.Athlet;
-import br.com.myapp.ultracartola.common.Common;
+import br.com.mapps.cartoloucos.business.Athlet;
+import br.com.mapps.cartoloucos.common.Common;
 
 /**
  * Created by Gustavo on 01/05/2017.

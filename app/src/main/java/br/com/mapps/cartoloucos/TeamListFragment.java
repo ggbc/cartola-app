@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola;
+package br.com.mapps.cartoloucos;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
-import br.com.myapp.ultracartola.business.Team;
-import br.com.myapp.ultracartola.common.Common;
+import br.com.mapps.cartoloucos.common.Common;
+import br.com.mapps.cartoloucos.business.Team;
 
 
 public class TeamListFragment extends Fragment implements ListView.OnItemClickListener {
@@ -213,7 +213,6 @@ public class TeamListFragment extends Fragment implements ListView.OnItemClickLi
         }
 
         intent.putExtra("teamId", t.getTimeId());
-        intent.putExtra("athlets", t.getAtletas());
         startActivity(intent);
     }
 }

@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola.business;
+package br.com.mapps.cartoloucos.business;
 
 import android.support.annotation.NonNull;
 

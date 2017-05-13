@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola;
+package br.com.mapps.cartoloucos;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="br.com.myapp.ultracartola.AthletsListActivity">
+    tools:context="br.com.mapps.cartoloucos.AthletsListActivity">
 
     <!--<FrameLayout-->
         <!--android:id="@+id/frameLayout"-->

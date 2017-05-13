@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.myapp.ultracartola">
+    package="br.com.mapps.cartoloucos">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="br.com.mapps.cartoloucos.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,16 +20,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AthletsListActivity"
+            android:name="br.com.mapps.cartoloucos.AthletsListActivity"
             android:label="Atletas"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="br.com.mapps.cartoloucos.MainActivity">
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="br.com.mapps.cartoloucos.MainActivity" />
         </activity>
-        <activity android:name=".SearchTeamActivity"
+        <activity android:name="br.com.mapps.cartoloucos.SearchTeamActivity"
             android:label="Adicionar time">
 
             <intent-filter>
@@ -39,7 +38,7 @@
                 android:resource="@xml/searchable"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="br.com.mapps.cartoloucos.MainActivity" />
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola;
+package br.com.mapps.cartoloucos;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import br.com.myapp.ultracartola.business.Team;
-import br.com.myapp.ultracartola.common.Common;
+import br.com.mapps.cartoloucos.business.Team;
+import br.com.mapps.cartoloucos.common.Common;
 
 public class SearchTeamActivity extends AppCompatActivity
         implements TeamSearchAdapter.IOnTeamCheckedListener {

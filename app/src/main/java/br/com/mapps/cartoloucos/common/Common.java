@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola.common;
+package br.com.mapps.cartoloucos.common;
 
 import android.content.Context;
 
@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import br.com.myapp.ultracartola.business.Athlet;
-import br.com.myapp.ultracartola.business.Team;
+import br.com.mapps.cartoloucos.business.Athlet;
+import br.com.mapps.cartoloucos.business.Team;
 
 /**
  * Created by Gustavo on 01/05/2017.

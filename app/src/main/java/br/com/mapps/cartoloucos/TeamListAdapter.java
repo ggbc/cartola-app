@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola;
+package br.com.mapps.cartoloucos;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +12,7 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
 
-import br.com.myapp.ultracartola.business.Team;
+import br.com.mapps.cartoloucos.business.Team;
 
 /**
  * Created by Gustavo on 29/04/2017.

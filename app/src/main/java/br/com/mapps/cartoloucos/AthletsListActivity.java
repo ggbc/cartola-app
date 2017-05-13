@@ -1,4 +1,4 @@
-package br.com.myapp.ultracartola;
+package br.com.mapps.cartoloucos;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +16,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import br.com.myapp.ultracartola.business.Athlet;
-import br.com.myapp.ultracartola.business.Team;
+import br.com.mapps.cartoloucos.business.Athlet;
+import br.com.mapps.cartoloucos.business.Team;
 
 public class AthletsListActivity extends AppCompatActivity {
 
@@ -73,8 +73,7 @@ public class AthletsListActivity extends AppCompatActivity {
      * Calls webservice https://api.cartolafc.globo.com/time/id/[?] to get team details
      */
     private void requestTeamById(int id) {
-//        String url = "https://api.cartolafc.globo.com/time/id/" + id;
-        String url = "https://api.cartolafc.globo.com/atletas/mercado";
+        String url = "https://api.cartolafc.globo.com/time/id/" + id;
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 

@@ -1,9 +1,9 @@
-package br.com.myapp.ultracartola.business;
+package br.com.mapps.cartoloucos.business;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import br.com.myapp.ultracartola.common.Common;
+import br.com.mapps.cartoloucos.common.Common;
 
 /**
  * Created by Gustavo on 08/03/2017.
